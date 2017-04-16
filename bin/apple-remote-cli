@@ -1,0 +1,34 @@
+#!/usr/bin/env php
+<?php
+/**
+ * AppleRemoteCli - Apple Remote protocol console application
+ *
+ * @author  panlatent@gmail.com
+ * @link    https://github.com/panlatent/apple-remote-cli
+ * @license https://opensource.org/licenses/MIT
+ */
+
+use Panlatent\AppleRemoteCli\Commands\Control\NextCommand;
+use Panlatent\AppleRemoteCli\Commands\Control\PlayCommand;
+use Panlatent\AppleRemoteCli\Commands\Control\StatusCommand;
+use Panlatent\AppleRemoteCli\Commands\Control\VolumeCommand;
+use Symfony\Component\Console\Application;
+
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require(__DIR__ . '/../vendor/autoload.php');
+} else {
+    die('Not found autoload.php');
+}
+
+if ( ! ini_get('date.timezone')) {
+    date_default_timezone_set('UTC');
+}
+
+$app = new Application('apple-remote-cli', '0.1.0');
+$app->addCommands([
+    new PlayCommand(),
+    new NextCommand(),
+    new VolumeCommand(),
+    new StatusCommand(),
+]);
+$app->run();
