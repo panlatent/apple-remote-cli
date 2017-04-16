@@ -45,20 +45,24 @@ class StatusCommand extends ControlCommand
         /** @var ProgressBar $progress */
         $progress = null;
         $playStatue = null;
+        $idUpdate = null;
+        $time = null;
+        $current = null;
         $requestLoop = 0;
         do {
             $markTime = microtime(true);
             if ($requestLoop == 0) {
                 try {
                     $playStatue = $this->control->getPlayStatus();
+                    $time = (int)($playStatue->songTime/1000);
+                    $current = (int)($time - $playStatue->songTimeRemaining/1000);
+                    $idUpdate = md5($playStatue->songName . $playStatue->songArtist . $time);
                 } catch (ClientException $e) {
                     break;
                 }
                 $requestLoop = 4;
             }
-            $time = (int)($playStatue->songTime/1000);
-            $current = (int)($time - $playStatue->songTimeRemaining/1000);
-            $idUpdate = md5($playStatue->songName . $playStatue->songArtist . $time);
+
             if ($id != $idUpdate) {
                 if ($progress) {
                     $progress->finish();
@@ -82,8 +86,11 @@ class StatusCommand extends ControlCommand
             } else {
                 $progress->advance();
             }
-            time_sleep_until($markTime + 1);
             $requestLoop -= 1;
+            $current += 1;
+            if (microtime(true) < $markTime + 1) {
+                time_sleep_until($markTime + 1);
+            }
         } while (1);
 
         $progress->clear();
