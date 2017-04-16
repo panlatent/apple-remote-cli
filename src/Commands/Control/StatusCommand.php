@@ -9,6 +9,7 @@
 
 namespace Panlatent\AppleRemoteCli\Commands\Control;
 
+use GuzzleHttp\Exception\ClientException;
 use Panlatent\AppleRemoteCli\Commands\ControlCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,7 +49,11 @@ class StatusCommand extends ControlCommand
         do {
             $markTime = microtime(true);
             if ($requestLoop == 0) {
-                $playStatue = $this->control->getPlayStatus();
+                try {
+                    $playStatue = $this->control->getPlayStatus();
+                } catch (ClientException $e) {
+                    break;
+                }
                 $requestLoop = 4;
             }
             $time = (int)($playStatue->songTime/1000);
@@ -80,6 +85,8 @@ class StatusCommand extends ControlCommand
             time_sleep_until($markTime + 1);
             $requestLoop -= 1;
         } while (1);
+
+        $progress->clear();
     }
 
     protected function makeWatchBar(OutputInterface $output, $max)

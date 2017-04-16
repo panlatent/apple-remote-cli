@@ -63,11 +63,16 @@ class RemoteClient
 
     /**
      * @param string $uri
-     * @param array $option
+     * @param array  $option
      * @return \Panlatent\DigitalAudio\Document
+     * @throws \Panlatent\AppleRemoteCli\Exception
      */
     public function get($uri, $option)
     {
+        if ( ! $this->login) {
+            throw new Exception('Remote need login');
+        }
+
         $option = array_merge_recursive([
             'query' => [
                 'session-id' => $this->sessionId,
