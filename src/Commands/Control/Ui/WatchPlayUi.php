@@ -96,7 +96,7 @@ class WatchPlayUi
         $coverBar = $this->makeCoverProgressBar();
         $coverBar->start();
         for ($i = 0; $i < 10; ++$i) {
-            $coverBar->advance($i*10);
+            $coverBar->advance($i * 10);
             usleep(100000);
         }
         $coverBar->clear();
@@ -158,7 +158,7 @@ class WatchPlayUi
         $this->progress = $this->makeProgressBar($this->time);
         $this->progress->setMessage($this->playStatue->songName, 'songName');
         $this->progress->setMessage($this->playStatue->songArtist, 'songArtist');
-        $this->progress->setMessage(date('i:s', $this->time), 'songTime');
+        $this->progress->setMessage($this->getTimeTag($this->time), 'songTime');
         $this->updatePlayIconArea();
         $this->updateTimeArea();
         $this->progress->start();
@@ -179,8 +179,8 @@ class WatchPlayUi
 
     protected function updateTimeArea()
     {
-        $this->progress->setMessage(date('i:s', $this->currentTime), 'currentTime');
-        $this->progress->setMessage(date('i:s', $this->progress->getMaxSteps() - $this->progress->getProgress()),
+        $this->progress->setMessage($this->getTimeTag($this->currentTime), 'currentTime');
+        $this->progress->setMessage($this->getTimeTag($this->progress->getMaxSteps() - $this->progress->getProgress()),
             'remainingTime');
     }
 
@@ -198,6 +198,7 @@ class WatchPlayUi
     {
         if (count($this->uiChangeStack) < 2) {
             $this->updated = false;
+
             return;
         }
 
@@ -233,6 +234,11 @@ class WatchPlayUi
         $progress->setFormat("Apple Remove Console by Panlatent\n\nEnjoy it!\n\n%bar%");
 
         return $progress;
+    }
+
+    protected function getTimeTag($time)
+    {
+        return ltrim(date('i:s', $time), '0');
     }
 
     protected function getPlayIcon()
