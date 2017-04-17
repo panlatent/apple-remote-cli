@@ -38,6 +38,18 @@ class ExtraContentTypes extends ElementFactory
             'play status',
             'daap.playstatus',
             ElementValueType::STRING,
+        ],
+        [
+            'cash',
+            'play shuffle',
+            'daap.playshuffle',
+            ElementValueType::STRING,
+        ],
+        [
+            'carp',
+            'play repeat',
+            'daap.playrepeat',
+            ElementValueType::STRING,
         ]
     ];
 

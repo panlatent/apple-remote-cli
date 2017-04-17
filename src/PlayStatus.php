@@ -17,6 +17,13 @@ class PlayStatus
     const PAUSE = 3;
     const PLAY = 4;
 
+    const NOT_SHUFFLE = 0;
+    const SHUFFLE = 1;
+
+    const NOT_LOOP = 0;
+    const SINGLE_LOOP = 1;
+    const LOOP = 2;
+
     public $playStatus;
 
     public $shuffle;
@@ -47,7 +54,7 @@ class PlayStatus
     {
         /** @var \Panlatent\DigitalAudio\ElementStorage $status */
         $status = $status->getElements()->one('cmst');
-//        var_dump($status->one('caps'));
+//        var_dump($status->one('carp'));die();
         $this->playStatus = $status->one('caps')->getValue();
         $this->shuffle = $status->one('cash')->getValue();
         $this->repeat = $status->one('carp')->getValue();

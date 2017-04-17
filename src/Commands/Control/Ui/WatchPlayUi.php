@@ -71,11 +71,6 @@ class WatchPlayUi
     /**
      * @var bool
      */
-    protected $initialized = false;
-
-    /**
-     * @var bool
-     */
     protected $updated = false;
 
     /**
@@ -102,18 +97,8 @@ class WatchPlayUi
         $coverBar->clear();
     }
 
-    public function init()
-    {
-        $this->getPlayStatus();
-        $this->refreshUi();
-        $this->initialized = true;
-    }
-
     public function show()
     {
-        if ( ! $this->initialized) {
-            $this->init();
-        }
         $requestLoop = 0;
         do {
             $markTime = microtime(true);
@@ -126,28 +111,31 @@ class WatchPlayUi
                 }
                 $requestLoop = 4;
             }
-
-            if ($this->updated) {
-                $this->freeUi();
-                $this->refreshUi();
-                $this->updated = false;
-            } else {
-                $this->updatePlayIconArea();
-                $this->updateTimeArea();
-            }
-
-            if ($requestLoop == 4) {
-                $this->progress->setProgress($this->currentTime);
-            } else {
-                if ($this->playStatue->playStatus == PlayStatus::PLAY) {
-                    $this->progress->advance();
-                    $this->currentTime += 1;
+            if ($this->playStatue->playStatus != PlayStatus::STOP) {
+                if ($this->updated) {
+                    $this->freeUi();
+                    $this->refreshUi();
+                    $this->updated = false;
+                } else {
+                    $this->updatePlayIconArea();
+                    $this->updateTimeArea();
                 }
+
+                if ($requestLoop == 4) {
+                    $this->progress->setProgress($this->currentTime);
+                } else {
+                    if ($this->playStatue->playStatus == PlayStatus::PLAY) {
+                        $this->progress->advance();
+                        $this->currentTime += 1;
+                    }
+                }
+                if (microtime(true) < $markTime + 1) {
+                    time_sleep_until($markTime + 1);
+                }
+            } else {
+                $this->cover();
             }
             $requestLoop -= 1;
-            if (microtime(true) < $markTime + 1) {
-                time_sleep_until($markTime + 1);
-            }
         } while (true);
 
         $this->freeUi();
@@ -158,6 +146,7 @@ class WatchPlayUi
         $this->progress = $this->makeProgressBar($this->time);
         $this->progress->setMessage($this->playStatue->songName, 'songName');
         $this->progress->setMessage($this->playStatue->songArtist, 'songArtist');
+        $this->progress->setMessage($this->playStatue->songAlbum, 'songAlbum');
         $this->progress->setMessage($this->getTimeTag($this->time), 'songTime');
         $this->updatePlayIconArea();
         $this->updateTimeArea();
@@ -174,7 +163,9 @@ class WatchPlayUi
 
     protected function updatePlayIconArea()
     {
-        $this->progress->setMessage($this->getPlayIcon(), 'pauseState');
+        $this->progress->setMessage($this->getPlayIcon(), 'playIcon');
+        $this->progress->setMessage($this->getShuffleIcon(), 'shuffleIcon');
+        $this->progress->setMessage($this->getRepeatIcon(), 'repeatIcon');
     }
 
     protected function updateTimeArea()
@@ -196,9 +187,8 @@ class WatchPlayUi
 
     protected function checkPlayStatusExpire()
     {
-        if (count($this->uiChangeStack) < 2) {
-            $this->updated = false;
-
+        if (count($this->uiChangeStack) == 1) {
+            $this->updated = true;
             return;
         }
 
@@ -217,7 +207,8 @@ class WatchPlayUi
         $progress->setProgressCharacter('<fg=green>⁍</>');
         $progress->setBarWidth(50);
         $progress->setFormat(
-            '%songName% %songArtist% %songTime% %pauseState%' . "\n\n" .
+            '%songName% %playIcon% %shuffleIcon% %repeatIcon%' . "\n" .
+            '%songArtist% - %songAlbum%' . "\n" .
             '%currentTime% <fg=white>⁌</>%bar%<fg=white>⁍</> %percent:3s%% -%remainingTime% / %songTime%'
         );
 
@@ -245,13 +236,36 @@ class WatchPlayUi
     {
         switch ($this->playStatue->playStatus) {
             case PlayStatus::PLAY:
-                return '️️▶️';
+                return '<fg=blue;>Play</>'; // ▶
             case PlayStatus::PAUSE:
-                return '⏸';
+                return '<fg=yellow>PAUSE</>'; // ⏸
             case PlayStatus::STOP:
-                return '⏹';
+                return '<fg=red>STOP</>'; // ⏹
             default:
                 throw new Exception('Unknown play status');
+        }
+    }
+
+    protected function getShuffleIcon()
+    {
+        if ($this->playStatue->shuffle == PlayStatus::SHUFFLE) {
+            return '<fg=blue;>Shuffle</>'; // 🔀
+        }
+
+        return '----';
+    }
+
+    protected function getRepeatIcon()
+    {
+        switch ($this->playStatue->repeat) {
+            case PlayStatus::NOT_LOOP:
+                return '----';
+            case PlayStatus::SINGLE_LOOP:
+                return '<fg=yellow>Single</>'; // 🔂
+            case PlayStatus::LOOP:
+                return '<fg=blue;>Loop</>'; // 🔁
+            default:
+                throw new Exception('Unknown loop type');
         }
     }
 }
