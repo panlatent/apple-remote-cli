@@ -32,6 +32,12 @@ class ExtraContentTypes extends ElementFactory
             'song time total',
             'daap.songtimetotal',
             ElementValueType::INT,
+        ],
+        [
+            'caps',
+            'play status',
+            'daap.playstatus',
+            ElementValueType::STRING,
         ]
     ];
 
