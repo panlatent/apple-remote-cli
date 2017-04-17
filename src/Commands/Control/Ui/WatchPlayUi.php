@@ -238,7 +238,7 @@ class WatchPlayUi
 
     protected function getTimeTag($time)
     {
-        return ltrim(date('i:s', $time), '0');
+        return preg_replace('#^0(?=\d+)#', '', date('i:s', $time));
     }
 
     protected function getPlayIcon()
