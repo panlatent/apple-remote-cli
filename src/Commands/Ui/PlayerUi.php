@@ -135,11 +135,12 @@ class PlayerUi
 
     protected function refreshUi()
     {
-        $this->progress = $this->makeProgressBar($this->time);
-        $this->progress->setMessage($this->playStatue->songName, 'songName');
-        $this->progress->setMessage($this->playStatue->songArtist, 'songArtist');
-        $this->progress->setMessage($this->playStatue->songAlbum, 'songAlbum');
-        $this->progress->setMessage($this->getTimeTag($this->time), 'songTime');
+        $this->progress = $this->makeProgressBar($this->time, [
+            'songName'   => $this->playStatue->songName,
+            'songArtist' => $this->playStatue->songArtist,
+            'songAlbum'  => $this->playStatue->songAlbum,
+            'songTime'   => $this->getTimeTag($this->time),
+        ]);
         $this->updatePlayIconArea();
         $this->updateTimeArea();
         $this->progress->start();
@@ -191,20 +192,31 @@ class PlayerUi
         $this->uiChangeStack->push($top);
     }
 
-    protected function makeProgressBar($max)
+    protected function makeProgressBar($max, $params = [])
     {
         $progress = new ProgressBar($this->output, $max);
         $progress->setBarCharacter('<fg=blue>⁍</>');
         $progress->setEmptyBarCharacter('<fg=white>⁍</>');
         $progress->setProgressCharacter('<fg=green>⁍</>');
         $progress->setBarWidth(50);
-        $progress->setFormat(
-            '%songName% %playIcon% %shuffleIcon% %repeatIcon%' . "\n" .
+        $progress->setFormat($this->processFormat(
+            '%songName%' . "\n" .
             '%songArtist% - %songAlbum%' . "\n" .
-            '%currentTime% <fg=white>⁌</>%bar%<fg=white>⁍</> %percent:3s%% -%remainingTime% / %songTime%'
-        );
+            '%playIcon% %currentTime% <fg=white>⁌</>%bar%<fg=white>⁍</> %percent:3s%% -%remainingTime% / %songTime%' .
+            ' %shuffleIcon% %repeatIcon%'
+        , $params));
 
         return $progress;
+    }
+
+    protected function processFormat($format, $params = [])
+    {
+        return preg_replace_callback('#%(\w+?)%#', function($match) use($params) {
+            if (isset($params[$match[1]])) {
+                return $params[$match[1]];
+            }
+            return '%' . $match[1] . '%';
+        }, $format);
     }
 
     protected function makeCoverProgressBar()
