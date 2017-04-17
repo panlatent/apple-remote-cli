@@ -132,6 +132,7 @@ class WatchPlayUi
                 $this->refreshUi();
                 $this->updated = false;
             } else {
+                $this->updatePlayIconArea();
                 $this->updateTimeArea();
             }
 
@@ -158,20 +159,7 @@ class WatchPlayUi
         $this->progress->setMessage($this->playStatue->songName, 'songName');
         $this->progress->setMessage($this->playStatue->songArtist, 'songArtist');
         $this->progress->setMessage(date('i:s', $this->time), 'songTime');
-        switch ($this->playStatue->playStatus) {
-            case PlayStatus::PLAY:
-                $button = '️️▶️';
-                break;
-            case PlayStatus::PAUSE:
-                $button = '⏸';
-                break;
-            case PlayStatus::STOP:
-                $button = '⏹';
-                break;
-            default:
-                throw new Exception('Unknown play status');
-        }
-        $this->progress->setMessage($button, 'pauseState');
+        $this->updatePlayIconArea();
         $this->updateTimeArea();
         $this->progress->start();
     }
@@ -184,9 +172,9 @@ class WatchPlayUi
         }
     }
 
-    protected function updatePlayingProgressUi()
+    protected function updatePlayIconArea()
     {
-
+        $this->progress->setMessage($this->getPlayIcon(), 'pauseState');
     }
 
     protected function updateTimeArea()
@@ -194,11 +182,6 @@ class WatchPlayUi
         $this->progress->setMessage(date('i:s', $this->currentTime), 'currentTime');
         $this->progress->setMessage(date('i:s', $this->progress->getMaxSteps() - $this->progress->getProgress()),
             'remainingTime');
-    }
-
-    protected function checkExpireArea()
-    {
-
     }
 
     protected function getPlayStatus()
@@ -250,5 +233,19 @@ class WatchPlayUi
         $progress->setFormat("Apple Remove Console by Panlatent\n\nEnjoy it!\n\n%bar%");
 
         return $progress;
+    }
+
+    protected function getPlayIcon()
+    {
+        switch ($this->playStatue->playStatus) {
+            case PlayStatus::PLAY:
+                return '️️▶️';
+            case PlayStatus::PAUSE:
+                return '⏸';
+            case PlayStatus::STOP:
+                return '⏹';
+            default:
+                throw new Exception('Unknown play status');
+        }
     }
 }
