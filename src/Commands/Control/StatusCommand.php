@@ -9,9 +9,8 @@
 
 namespace Panlatent\AppleRemoteCli\Commands\Control;
 
-use GuzzleHttp\Exception\ClientException;
+use Panlatent\AppleRemoteCli\Commands\Control\Ui\WatchPlayUi;
 use Panlatent\AppleRemoteCli\Commands\ControlCommand;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +29,7 @@ class StatusCommand extends ControlCommand
     {
         parent::execute($input, $output);
         if ($input->getOption('watch')) {
-            $this->showWatchBar($input, $output);
+            $this->showWatchPlayUi($input, $output);
         } else {
             $playStatue = $this->control->getPlayStatus();
             $output->writeln(
@@ -39,75 +38,10 @@ class StatusCommand extends ControlCommand
         }
     }
 
-    protected function showWatchBar(InputInterface $input, OutputInterface $output)
+    protected function showWatchPlayUi(InputInterface $input, OutputInterface $output)
     {
-        $id = '';
-        /** @var ProgressBar $progress */
-        $progress = null;
-        $playStatue = null;
-        $idUpdate = null;
-        $time = null;
-        $current = null;
-        $requestLoop = 0;
-        do {
-            $markTime = microtime(true);
-            if ($requestLoop == 0) {
-                try {
-                    $playStatue = $this->control->getPlayStatus();
-                    $time = (int)($playStatue->songTime/1000);
-                    $current = (int)($time - $playStatue->songTimeRemaining/1000);
-                    $idUpdate = md5($playStatue->songName . $playStatue->songArtist . $time);
-                } catch (ClientException $e) {
-                    break;
-                }
-                $requestLoop = 4;
-            }
-
-            if ($id != $idUpdate) {
-                if ($progress) {
-                    $progress->finish();
-                    $progress->clear();
-                }
-                $progress = $this->makeWatchBar($output, $time);
-                $progress->setMessage($playStatue->songName, 'songName');
-                $progress->setMessage($playStatue->songArtist, 'songArtist');
-                $progress->setMessage(date('i:s', $time), 'songTime');
-                $progress->setMessage(date('i:s', $current), 'currentTime');
-                $progress->setMessage(date('i:s', $progress->getMaxSteps() - $progress->getProgress()), 'remainingTime');
-                $progress->start();
-                $id = $idUpdate;
-            } else {
-                $progress->setMessage(date('i:s', $current), 'currentTime');
-                $progress->setMessage(date('i:s', $progress->getMaxSteps() - $progress->getProgress()), 'remainingTime');
-            }
-
-            if ($requestLoop == 4) {
-                $progress->setProgress($current);
-            } else {
-                $progress->advance();
-            }
-            $requestLoop -= 1;
-            $current += 1;
-            if (microtime(true) < $markTime + 1) {
-                time_sleep_until($markTime + 1);
-            }
-        } while (1);
-
-        $progress->clear();
-    }
-
-    protected function makeWatchBar(OutputInterface $output, $max)
-    {
-        $progress = new ProgressBar($output, $max);
-        $progress->setBarCharacter('<fg=blue>⁍</>');
-        $progress->setEmptyBarCharacter('<fg=white>⁍</>');
-        $progress->setProgressCharacter('<fg=green>⁍</>');
-        $progress->setBarWidth(50);
-        $progress->setFormat(
-            '%songName% %songArtist% %songTime%' .  "\n\n" .
-            '%currentTime% <fg=white>⁌</>%bar%<fg=white>⁍</> %percent:3s%% -%remainingTime% / %songTime%'
-        );
-
-        return $progress;
+        $ui = new WatchPlayUi($input, $output, $this->control);
+        $ui->cover();
+        $ui->show();
     }
 }
