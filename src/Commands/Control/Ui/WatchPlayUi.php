@@ -138,10 +138,12 @@ class WatchPlayUi
             if ($requestLoop == 4) {
                 $this->progress->setProgress($this->currentTime);
             } else {
-                $this->progress->advance();
+                if ($this->playStatue->playStatus == PlayStatus::PLAY) {
+                    $this->progress->advance();
+                    $this->currentTime += 1;
+                }
             }
             $requestLoop -= 1;
-            $this->currentTime += 1;
             if (microtime(true) < $markTime + 1) {
                 time_sleep_until($markTime + 1);
             }
