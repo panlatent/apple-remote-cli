@@ -18,7 +18,9 @@
 namespace Panlatent\AppleRemoteCli\Commands\Control\Ui;
 
 use GuzzleHttp\Exception\ClientException;
+use Panlatent\AppleRemoteCli\Commands\Exception;
 use Panlatent\AppleRemoteCli\PlayControl;
+use Panlatent\AppleRemoteCli\PlayStatus;
 use SplStack;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -154,6 +156,20 @@ class WatchPlayUi
         $this->progress->setMessage($this->playStatue->songName, 'songName');
         $this->progress->setMessage($this->playStatue->songArtist, 'songArtist');
         $this->progress->setMessage(date('i:s', $this->time), 'songTime');
+        switch ($this->playStatue->playStatus) {
+            case PlayStatus::PLAY:
+                $button = '️️▶️';
+                break;
+            case PlayStatus::PAUSE:
+                $button = '⏸';
+                break;
+            case PlayStatus::STOP:
+                $button = '⏹';
+                break;
+            default:
+                throw new Exception('Unknown play status');
+        }
+        $this->progress->setMessage($button, 'pauseState');
         $this->updateTimeArea();
         $this->progress->start();
     }
@@ -215,7 +231,7 @@ class WatchPlayUi
         $progress->setProgressCharacter('<fg=green>⁍</>');
         $progress->setBarWidth(50);
         $progress->setFormat(
-            '%songName% %songArtist% %songTime%' . "\n\n" .
+            '%songName% %songArtist% %songTime% %pauseState%' . "\n\n" .
             '%currentTime% <fg=white>⁌</>%bar%<fg=white>⁍</> %percent:3s%% -%remainingTime% / %songTime%'
         );
 
