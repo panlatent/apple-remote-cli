@@ -125,6 +125,10 @@ class PlayerUi
                     time_sleep_until($markTime + 1);
                 }
             } else {
+                if ($this->updated) {
+                    $this->freeUi();
+                    $this->updated = false;
+                }
                 $this->cover();
             }
             $requestLoop -= 1;
@@ -151,6 +155,7 @@ class PlayerUi
         if ($this->progress) {
             $this->progress->finish();
             $this->progress->clear();
+            $this->progress = null;
         }
     }
 
