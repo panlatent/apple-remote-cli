@@ -25,14 +25,16 @@ abstract class ControlCommand extends Command
     protected function configure()
     {
         parent::configure();
-        $this->addOption('auth', 'a', InputOption::VALUE_REQUIRED, 'authorization code');
+        $this->addOption('auth', null, InputOption::VALUE_REQUIRED, 'authorization code');
+        $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'server host', '127.0.0.1');
+        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'server port', '3689');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
         $authorizationCode = $input->getOption('auth');
-        $remote = new RemoteClient();
+        $remote = new RemoteClient($input->getOption('host'), $input->getOption('port'));
         $remote->login($authorizationCode);
 
         $this->control = new PlayControl($remote);
