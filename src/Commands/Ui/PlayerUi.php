@@ -7,15 +7,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-/**
- * AppleRemoteCli - Apple Remote protocol console application
- *
- * @author  panlatent@gmail.com
- * @link    https://github.com/panlatent/apple-remote-cli
- * @license https://opensource.org/licenses/MIT
- */
-
-namespace Panlatent\AppleRemoteCli\Commands\Control\Ui;
+namespace Panlatent\AppleRemoteCli\Commands\Ui;
 
 use GuzzleHttp\Exception\ClientException;
 use Panlatent\AppleRemoteCli\Commands\Exception;
@@ -26,7 +18,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class WatchPlayUi
+class PlayerUi
 {
     /**
      * @var \Symfony\Component\Console\Input\InputInterface
@@ -236,7 +228,7 @@ class WatchPlayUi
     {
         switch ($this->playStatue->playStatus) {
             case PlayStatus::PLAY:
-                return '<fg=blue;>Play</>'; // ▶
+                return '<fg=blue>Play</>'; // ▶
             case PlayStatus::PAUSE:
                 return '<fg=yellow>PAUSE</>'; // ⏸
             case PlayStatus::STOP:
@@ -249,7 +241,7 @@ class WatchPlayUi
     protected function getShuffleIcon()
     {
         if ($this->playStatue->shuffle == PlayStatus::SHUFFLE) {
-            return '<fg=blue;>Shuffle</>'; // 🔀
+            return '<fg=blue>Shuffle</>'; // 🔀
         }
 
         return '----';
@@ -263,7 +255,7 @@ class WatchPlayUi
             case PlayStatus::SINGLE_LOOP:
                 return '<fg=yellow>Single</>'; // 🔂
             case PlayStatus::LOOP:
-                return '<fg=blue;>Loop</>'; // 🔁
+                return '<fg=blue>Loop</>'; // 🔁
             default:
                 throw new Exception('Unknown loop type');
         }

@@ -7,27 +7,26 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-namespace Panlatent\AppleRemoteCli\Commands\Control;
+namespace Panlatent\AppleRemoteCli\Commands;
 
-use Panlatent\AppleRemoteCli\Commands\ControlCommand;
+use Panlatent\AppleRemoteCli\Commands\Ui\PlayerUi;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StatusCommand extends ControlCommand
+class PlayerCommand extends ControlCommand
 {
     protected function configure()
     {
         parent::configure();
-        $this->setName('status')
-            ->setDescription('Show current play status');
+        $this->setName('player')
+            ->setDescription('Run a remote player');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-        $playStatue = $this->control->getPlayStatus();
-        $output->writeln(
-            $playStatue->songName . ' ' . $playStatue->songArtist . ' ' . date('i:s', $playStatue->songTime/1000)
-        );
+        $ui = new PlayerUi($input, $output, $this->control);
+        $ui->cover();
+        $ui->show();
     }
 }

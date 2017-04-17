@@ -12,6 +12,7 @@ use Panlatent\AppleRemoteCli\Commands\Control\NextCommand;
 use Panlatent\AppleRemoteCli\Commands\Control\PlayCommand;
 use Panlatent\AppleRemoteCli\Commands\Control\StatusCommand;
 use Panlatent\AppleRemoteCli\Commands\Control\VolumeCommand;
+use Panlatent\AppleRemoteCli\Commands\PlayerCommand;
 use Symfony\Component\Console\Application;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
@@ -30,5 +31,8 @@ $app->addCommands([
     new NextCommand(),
     new VolumeCommand(),
     new StatusCommand(),
+]);
+$app->addCommands([
+   new PlayerCommand(),
 ]);
 $app->run();
