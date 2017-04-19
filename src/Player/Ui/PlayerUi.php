@@ -10,18 +10,17 @@
 namespace Panlatent\AppleRemoteCli\Player\Ui;
 
 use Panlatent\AppleRemoteCli\Commands\Exception;
-use Panlatent\AppleRemoteCli\Player\IntervalTaskInterface;
 use Panlatent\AppleRemoteCli\PlayStatus;
 use Symfony\Component\Console\Helper\ProgressBar;
 
-class PlayerUi extends UiAbstract implements IntervalTaskInterface
+class PlayerUi extends UiAbstract
 {
     /**
      * @var bool
      */
     protected $handle = true;
 
-    protected $rate = 1000000;
+    protected $rate = 1000;
 
     /**
      * @var \Symfony\Component\Console\Helper\ProgressBar
@@ -33,18 +32,12 @@ class PlayerUi extends UiAbstract implements IntervalTaskInterface
      */
     protected $currentTime;
 
-    public function isHandle()
-    {
-        return $this->handle;
-    }
-
     public function handle()
     {
         if ( ! isset($this->model->playState) || $this->model->playState == PlayStatus::STOP) {
             if ($this->progress) {
                 $this->freeUi();
             }
-            $this->handle = false;
             return new CoverUi($this->dispatcher, $this->output, $this->model, $this);
         }
 

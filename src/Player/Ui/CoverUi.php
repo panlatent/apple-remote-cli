@@ -14,27 +14,16 @@ use Symfony\Component\Console\Helper\ProgressBar;
 
 class CoverUi extends UiAbstract
 {
-    /**
-     * @var bool
-     */
-    protected $handle = false;
-
-    protected $rate = 100000;
+    protected $rate = 100;
 
     /**
      * @var \Symfony\Component\Console\Helper\ProgressBar
      */
     protected $progress;
 
-    public function isHandle()
-    {
-        return $this->handle;
-    }
-
     public function handle()
     {
-        if ($this->model->playState != PlayStatus::STOP) {
-            $this->handle = false;
+        if (isset($this->model->playState) && $this->model->playState != PlayStatus::STOP) {
             $this->freeUi();
             return false;
         }

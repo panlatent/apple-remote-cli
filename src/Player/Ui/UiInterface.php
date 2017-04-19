@@ -9,17 +9,19 @@
 
 namespace Panlatent\AppleRemoteCli\Player\Ui;
 
-use Panlatent\AppleRemoteCli\Player\IntervalTaskInterface;
-
-interface UiInterface extends IntervalTaskInterface
+interface UiInterface
 {
+    public function getParent();
+
+    public function getRate();
+
+    public function isHidden();
+
     public function show();
 
     public function hidden();
 
+    public function handle();
+
     public function render();
-
-    public function getParent();
-
-    public function getRate();
 }

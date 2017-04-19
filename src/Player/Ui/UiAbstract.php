@@ -9,13 +9,13 @@
 
 namespace Panlatent\AppleRemoteCli\Player\Ui;
 
-use Panlatent\AppleRemoteCli\Player\IntervalDispatcher;
+use Panlatent\AppleRemoteCli\Player\Timer\Dispatcher;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class UiAbstract implements UiInterface
 {
     /**
-     * @var \Panlatent\AppleRemoteCli\Player\IntervalDispatcher
+     * @var \Panlatent\AppleRemoteCli\Player\Timer\Dispatcher
      */
     protected $dispatcher;
 
@@ -27,7 +27,7 @@ abstract class UiAbstract implements UiInterface
     /**
      * @var bool
      */
-    protected $handle;
+    protected $hidden;
 
     /**
      * @var \Panlatent\AppleRemoteCli\Player\Ui\PlayerUiModel
@@ -44,7 +44,8 @@ abstract class UiAbstract implements UiInterface
      */
     protected $rate;
 
-    public function __construct(IntervalDispatcher $dispatcher, OutputInterface $output, PlayerUiModel $model,
+    public function __construct(
+        Dispatcher $dispatcher, OutputInterface $output, PlayerUiModel $model,
         UiInterface $parent = null)
     {
         $this->dispatcher = $dispatcher;
@@ -54,16 +55,6 @@ abstract class UiAbstract implements UiInterface
     }
 
     abstract public function render();
-
-    public function show()
-    {
-        $this->handle = true;
-    }
-
-    public function hidden()
-    {
-        $this->handle = false;
-    }
 
     /**
      * @return \Panlatent\AppleRemoteCli\Player\Ui\UiInterface
@@ -79,5 +70,20 @@ abstract class UiAbstract implements UiInterface
     public function getRate()
     {
         return $this->rate;
+    }
+
+    public function isHidden()
+    {
+        return $this->hidden;
+    }
+
+    public function show()
+    {
+        $this->hidden = false;
+    }
+
+    public function hidden()
+    {
+        $this->hidden = true;
     }
 }
