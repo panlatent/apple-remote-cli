@@ -9,6 +9,7 @@
 
 namespace Panlatent\AppleRemoteCli\Player;
 
+use GuzzleHttp\Exception\ClientException;
 use Panlatent\AppleRemoteCli\PlayControl;
 use Panlatent\AppleRemoteCli\Player\Ui\PlayerUi;
 use Panlatent\AppleRemoteCli\Player\Ui\PlayerUiModel;
@@ -57,7 +58,11 @@ class Player implements IntervalTaskInterface
 
     public function handle()
     {
-        $playStatue = $this->control->getPlayStatus();
+        try {
+            $playStatue = $this->control->getPlayStatus();
+        } catch (ClientException $e) {
+            die(0);
+        }
         $this->model->playState = $playStatue->playStatus;
         $this->model->shuffle = $playStatue->shuffle;
         $this->model->repeat = $playStatue->repeat;
