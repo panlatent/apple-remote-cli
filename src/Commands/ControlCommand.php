@@ -36,7 +36,6 @@ abstract class ControlCommand extends Command
         $authorizationCode = $input->getOption('auth');
         $remote = new RemoteClient($input->getOption('host'), $input->getOption('port'));
         $remote->login($authorizationCode);
-
         $this->control = new PlayControl($remote);
     }
 }

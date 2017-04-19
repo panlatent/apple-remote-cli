@@ -62,8 +62,8 @@ class RemoteClient
     }
 
     /**
-     * @param string $uri
-     * @param array  $option
+     * @param string        $uri
+     * @param array         $option
      * @return \Panlatent\DigitalAudio\Document
      * @throws \Panlatent\AppleRemoteCli\Exception
      */
@@ -81,7 +81,6 @@ class RemoteClient
         ], $option);
 
         $response = $this->httpClient->get($uri, $option);
-
         return Response::create($response->getBody());
     }
 

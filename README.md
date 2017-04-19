@@ -9,11 +9,17 @@ Apple Remote Cli
 
 Apple Remote protocol console application. Using console control your iTunes.
 
-Apple Remote Cli 是 `Apple 遥控器（ iOS ）` 的命令行的不完整实现。
+**Apple Remote Cli 是 `Apple 遥控器（ iOS ）` 的命令行的不完整实现。
 
     (!) 不完整原因：由于使用 PHP 编写，无法直接调用相关系统API，也没有找到与 Bonjour 服务通信的方法，
-    更无法抢占设备的 mDNS 端口。所以该命令实现目前需要使用 iOS 设备遥控器配对数据。
+    更无法抢占设备的 mDNS 端口。所以该命令实现目前需要使用 iOS 设备遥控器配对数据。**
 
+About Matches
+-------------
+
+Usage
+-----
+    
 License
 -------
 

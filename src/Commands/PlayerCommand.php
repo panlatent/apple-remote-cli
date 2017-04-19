@@ -9,7 +9,7 @@
 
 namespace Panlatent\AppleRemoteCli\Commands;
 
-use Panlatent\AppleRemoteCli\Commands\Ui\PlayerUi;
+use Panlatent\AppleRemoteCli\Player\Player;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -25,8 +25,7 @@ class PlayerCommand extends ControlCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-        $ui = new PlayerUi($input, $output, $this->control);
-        $ui->cover();
-        $ui->show();
+        $player = new Player($input, $output, $this->control);
+        $player->run();
     }
 }
