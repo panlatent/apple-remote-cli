@@ -1,4 +1,4 @@
-Apple Remote Cli
+Apple Remote CLI
 ================
 [![Build Status](https://travis-ci.org/panlatent/apple-remote-cli.svg)](https://travis-ci.org/panlatent/apple-remote-cli)
 [![Latest Stable Version](https://poser.pugx.org/panlatent/apple-remote-cli/v/stable.svg)](https://packagist.org/packages/panlatent/apple-remote-cli) 
@@ -6,8 +6,16 @@ Apple Remote Cli
 [![Latest Unstable Version](https://poser.pugx.org/panlatent/apple-remote-cli/v/unstable.svg)](https://packagist.org/packages/panlatent/apple-remote-cli) 
 [![License](https://poser.pugx.org/panlatent/apple-remote-cli/license.svg)](https://packagist.org/packages/panlatent/apple-remote-cli)
 
-
 Apple Remote protocol console application. Using console control your iTunes.
+
+![](http://wx1.sinaimg.cn/mw690/005LUFJRly1fetdabsq1yg30ic029dh2.gif)
+
+![](http://wx3.sinaimg.cn/mw690/005LUFJRly1fetdacxy49g30gd03s76j.gif)
+
+![](http://wx3.sinaimg.cn/mw690/005LUFJRly1fetdaeildig30gd041773.gif)
+
+What's this
+------------
 
 **Apple Remote Cli 是 `Apple 遥控器（ iOS ）` 的命令行的不完整实现。
 
@@ -17,9 +25,12 @@ Apple Remote protocol console application. Using console control your iTunes.
 About Matches
 -------------
 
+Installation
+-------------
+
 Usage
 -----
-    
+
 License
 -------
 
