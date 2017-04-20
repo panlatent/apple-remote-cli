@@ -16,22 +16,44 @@ Apple Remote protocol console application. Using console control your iTunes.
 
 What's this
 ------------
+Apple Remote Cli like `Apple Remote App（ iOS ）`. It is a command-line program, 
+so you can use it to control your iTunes, it's cool!
 
-**Apple Remote Cli 是 `Apple 遥控器（ iOS ）` 的命令行的不完整实现。
-
-    (!) 不完整原因：由于使用 PHP 编写，无法直接调用相关系统API，也没有找到与 Bonjour 服务通信的方法，
-    更无法抢占设备的 mDNS 端口。所以该命令实现目前需要使用 iOS 设备遥控器配对数据。**
+This tool includes a command line character ui. It can display song and states.
+You can use a shortcut key like `Vim` to control iTunes. 
 
 About Matches
 -------------
+This project not supported with iTunes recognition and matching. Very sad. You 
+need to add a `--auth=` parameter，requires you to manually capture matching 
+data.
+
+    (!) 由于使用 PHP 编写，无法直接调用相关系统API，也没有找到与 Bonjour 服务通信的方法，
+    更无法抢占设备的 mDNS 端口。所以该命令实现目前需要使用 iOS 设备遥控器配对数据。**
+
+Requirements
+-------------
++ PHP 5.5 or later
 
 Installation
 -------------
+Download the library using composer:
+
+```bash
+$ composer require panlatent/apple-remote-cli
+```
 
 Usage
 -----
+```bash
+$ apple-remote-cli play/next/last/vol [-+]value
+```
+
+Run player:
+```bash
+$ apple-remote-cli player
+```
 
 License
 -------
-
-The Site CLI is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Apple Remote CLI is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
