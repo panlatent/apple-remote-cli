@@ -9,13 +9,13 @@
 
 namespace Panlatent\AppleRemoteCli\Player\Ui;
 
-use Panlatent\AppleRemoteCli\Player\Timer\Dispatcher;
+use Panlatent\Timer\Dispatcher;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class UiAbstract implements UiInterface
 {
     /**
-     * @var \Panlatent\AppleRemoteCli\Player\Timer\Dispatcher
+     * @var \Panlatent\Timer\Dispatcher
      */
     protected $dispatcher;
 

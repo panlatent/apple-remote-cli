@@ -9,8 +9,8 @@
 
 namespace Panlatent\AppleRemoteCli\Player\Ui;
 
-use Panlatent\AppleRemoteCli\Player\Timer\Dispatcher;
-use Panlatent\AppleRemoteCli\Player\Timer\IntervalTimer;
+use Panlatent\Timer\Dispatcher;
+use Panlatent\Timer\IntervalTimer;
 use SplStack;
 
 class UiDispatcher extends IntervalTimer

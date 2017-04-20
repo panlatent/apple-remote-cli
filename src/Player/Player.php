@@ -11,12 +11,12 @@ namespace Panlatent\AppleRemoteCli\Player;
 
 use GuzzleHttp\Exception\ClientException;
 use Panlatent\AppleRemoteCli\PlayControl;
-use Panlatent\AppleRemoteCli\Player\Timer\Dispatcher;
-use Panlatent\AppleRemoteCli\Player\Timer\Interval;
 use Panlatent\AppleRemoteCli\Player\Ui\PlayerUi;
 use Panlatent\AppleRemoteCli\Player\Ui\PlayerUiModel;
 use Panlatent\AppleRemoteCli\Player\Ui\UiDispatcher;
 use Panlatent\AppleRemoteCli\PlayStatus;
+use Panlatent\Timer\Dispatcher;
+use Panlatent\Timer\Interval;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -50,7 +50,7 @@ class Player
     public function run()
     {
         $this->handle();
-        $this->dispatcher->handle();
+        $this->dispatcher->dispatch();
     }
 
     public function handle()
