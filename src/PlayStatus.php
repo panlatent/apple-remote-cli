@@ -60,13 +60,15 @@ class PlayStatus
         $this->repeat = $status->one('carp')->getValue();
         $this->fullScreen = $status->one('cafs')->getValue();
         $this->visualizer = $status->one('cavs')->getValue();
-        if ($this->playStatus != static::STOP) {
+        if ($status->one('cann')) {
             $this->nowPlaying = $status->one('canp')->getValue();
             $this->songName = $status->one('cann')->getValue();
             $this->songArtist = $status->one('cana')->getValue();
             $this->songAlbum = $status->one('canl')->getValue();
             $this->songTime = $status->one('astm')->getValue();
-            $this->songTimeRemaining = $status->one('cant')->getValue();
+            if ($status->one('cant')) {
+                $this->songTimeRemaining = $status->one('cant')->getValue();
+            }
             $this->songTimeTotal = $status->one('cast')->getValue();
         }
     }

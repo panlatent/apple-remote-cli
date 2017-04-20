@@ -30,9 +30,32 @@ class PlayControl
         $this->run('playpause');
     }
 
+    public function last()
+    {
+        $this->run('previtem');
+    }
+
     public function next()
     {
         $this->run('nextitem');
+    }
+
+    public function repeat($repeat)
+    {
+        $this->run('setproperty', [
+            'query' => [
+                'dacp.repeatstate' => $repeat,
+            ],
+        ]);
+    }
+
+    public function shuffle($shuffle)
+    {
+        $this->run('setproperty', [
+            'query' => [
+                'dacp.shufflestate' => $shuffle,
+            ],
+        ]);
     }
 
     public function getVolume()
