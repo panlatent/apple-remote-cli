@@ -48,6 +48,7 @@ class Player
 
     public function run()
     {
+        $this->handle();
         $this->dispatcher->handle();
     }
 

@@ -57,7 +57,6 @@ class PlayerUi extends UiAbstract
     protected function refreshUi()
     {
         $this->progress = $this->makeProgressBar((int)($this->model->songTime/1000));
-        $this->progress->setProgress((int)($this->model->songCurrentTime/1000));
         $this->update();
         $this->progress->start();
     }
@@ -80,9 +79,10 @@ class PlayerUi extends UiAbstract
             $this->progress->setProgress((int)($this->currentTime/1000));
         } elseif ( ! in_array('songCurrentTime', $changes) && $this->model->playState == PlayStatus::PLAY) {
             $this->currentTime += 1000;
-            $this->progress->advance();
+
             $this->updateTime();
         }
+        $this->progress->advance();
     }
 
     protected function updateTime()
