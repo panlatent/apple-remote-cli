@@ -60,6 +60,11 @@ class PlayerUiModel
         $this->properties[$name] = $value;
     }
 
+    public function reentry()
+    {
+        $this->changes = array_flip(array_keys($this->properties));
+    }
+
     public function pop()
     {
         $changes = array_keys($this->changes);

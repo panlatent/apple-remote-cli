@@ -80,7 +80,7 @@ abstract class UiAbstract implements UiInterface
     public function show()
     {
         $this->hidden = false;
-        $this->render();
+        $this->model->reentry();
     }
 
     public function hidden()

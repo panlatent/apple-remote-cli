@@ -27,14 +27,19 @@ class UiDispatcher extends IntervalTimer
 
     public function interval()
     {
-//        if ( ! $this->uiStack->top()->isHidden()) {
-            $result = $this->uiStack->top()->handle();
-            if ($result === false) {
-                $this->uiStack->pop();
-            } elseif (is_object($result) && $result instanceof UiInterface) {
-                $this->uiStack->push($result);
-                $this->delay = $result->getRate();
+        $result = $this->uiStack->top()->handle();
+        if ($result === false) {
+            $this->uiStack->pop();
+            if ($this->uiStack->isEmpty()) {
+                $this->clear();
+            } else {
+                $this->delay = $this->uiStack->top()->getRate();
+                $this->uiStack->top()->show();
             }
-//        }
+        } elseif (is_object($result) && $result instanceof UiInterface) {
+            $this->uiStack->top()->hidden();
+            $this->uiStack->push($result);
+            $this->delay = $this->uiStack->top()->getRate();
+        }
     }
 }
