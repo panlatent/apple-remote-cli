@@ -8,6 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
+use Panlatent\AppleRemoteCli\Commands\Control\LastCommand;
 use Panlatent\AppleRemoteCli\Commands\Control\NextCommand;
 use Panlatent\AppleRemoteCli\Commands\Control\PlayCommand;
 use Panlatent\AppleRemoteCli\Commands\Control\StatusCommand;
@@ -29,6 +30,7 @@ $app = new Application('apple-remote-cli', '0.1.0');
 $app->addCommands([
     new PlayCommand(),
     new NextCommand(),
+    new LastCommand(),
     new VolumeCommand(),
     new StatusCommand(),
 ]);
