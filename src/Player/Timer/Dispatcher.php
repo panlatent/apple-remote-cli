@@ -29,31 +29,34 @@ class Dispatcher
 
     public function handle()
     {
-        $drag = 0;
         $this->done = false;
         while ( ! $this->done && ! $this->timers->isEmpty()) {
             $timer = $this->timers->top();
+
+            $beforeDelay = (int)(microtime(true) * 1000);
+            $elapsed = $beforeDelay - $timer->getBorn();
+
             $delay = $timer->getDelay();
-            if ($delay >= $drag - 5) { // 5ms
+            if ($delay >= $elapsed) { // 5ms - 5
+                $delay -= $elapsed;
+
                 $sec = (int)($delay / 1000);
                 $micro = $delay % 1000;
 
-                $before = microtime(true);
+                $beforeSleep = microtime(true);
                 if (time_nanosleep($sec, $micro * 1000)) {
 
                 }
-                $sleep = (microtime(true) - $before) * 1000;
-                if ($sleep + $drag >= $delay) {
+                $sleep = (microtime(true) - $beforeSleep) * 1000;
+
+                if ($sleep >= $delay) {
                     $timer->run();
                     $this->timers->extract();
                 }
             } else {
-                $before = microtime(true);
                 $timer->run();
                 $this->timers->extract();
             }
-
-            $drag = (int)(microtime(true) - $before) * 1000;
         }
     }
 }
