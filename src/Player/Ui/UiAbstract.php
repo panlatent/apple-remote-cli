@@ -42,7 +42,7 @@ abstract class UiAbstract implements UiInterface
     /**
      * @var int
      */
-    protected $rate;
+    protected $rate = 1000;
 
     public function __construct(
         Dispatcher $dispatcher, OutputInterface $output, PlayerUiModel $model,

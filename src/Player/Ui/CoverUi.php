@@ -39,8 +39,8 @@ class CoverUi extends UiAbstract
             $this->progress->start();
         }
 
-        $this->progress->advance(1);
-        if ($this->progress->getProgress() >= 100) {
+        $this->progress->advance(10);
+        if ($this->progress->getProgress() >= 110) {
             $this->progress->setProgress(0);
         }
     }
@@ -59,7 +59,8 @@ class CoverUi extends UiAbstract
         $progress->setEmptyBarCharacter('<fg=white>⁍</>');
         $progress->setProgressCharacter('<fg=green>⁍</>');
         $progress->setBarWidth(50);
-        $progress->setFormat("Apple Remove Console by Panlatent\n\nEnjoy it!\n\n%bar%");
+        $progress->setFormat("Apple Remote Console by Panlatent\n\nEnjoy it!\n\n%bar%");
+        $progress->setRedrawFrequency(20);
 
         return $progress;
     }

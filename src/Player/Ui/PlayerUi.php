@@ -20,8 +20,6 @@ class PlayerUi extends UiAbstract
      */
     protected $handle = true;
 
-    protected $rate = 1000;
-
     /**
      * @var \Symfony\Component\Console\Helper\ProgressBar
      */

@@ -41,9 +41,9 @@ class Player
         $this->control = $control;
         $this->model = new PlayerUiModel();
 
-        $this->ui = new UiDispatcher(new PlayerUi($this->dispatcher, $output, $this->model));
+        $this->ui = new UiDispatcher($this->dispatcher, new PlayerUi($this->dispatcher, $output, $this->model));
+        $this->dispatcher->addTimer($this->ui);
         $this->dispatcher->addTimer(new Interval($this->dispatcher, 1000 * 4, [$this, 'handle']));
-        $this->dispatcher->addTimer(new Interval($this->dispatcher, 1000, [$this->ui, 'handle']));
     }
 
     public function run()
