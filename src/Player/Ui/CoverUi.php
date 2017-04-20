@@ -59,7 +59,7 @@ class CoverUi extends UiAbstract
         $progress->setEmptyBarCharacter('<fg=white>⁍</>');
         $progress->setProgressCharacter('<fg=green>⁍</>');
         $progress->setBarWidth(50);
-        $progress->setFormat("Apple Remote Console by Panlatent\n\nEnjoy it!\n\n%bar%");
+        $progress->setFormat("Apple Remote Console by Panlatent\n\nEnjoy it!\n\n%bar%\n");
         $progress->setRedrawFrequency(20);
 
         return $progress;

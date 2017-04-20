@@ -9,21 +9,72 @@
 
 namespace Panlatent\AppleRemoteCli\Player\Ui;
 
+use Panlatent\AppleRemoteCli\PlayStatus;
+
 class PlayerIo
 {
-    public function __construct()
-    {
+    protected $dispatcher;
 
+    protected $model;
+
+    public function __construct(UiDispatcher $dispatcher, PlayerUiModel $model)
+    {
+        $this->dispatcher = $dispatcher;
+        $this->model = $model;
+        shell_exec('stty -echo time 0 -icanon');
+        stream_set_blocking(STDIN, false);
     }
 
     public function run()
     {
-        shell_exec('stty -echo time 0 -icanon');
-        stream_set_blocking(STDIN, false);
-        while (1) {
-            $f = fgetc(STDIN);
-            echo $f;
+        if (($c = fgetc(STDIN))) {
+            switch ($c) {
+                case 'q': // quit
+                    $this->dispatcher->clear();
+                    break;
+                case 'k': // last song
+                    $this->model->signal = PlayerUiModel::SIGNAL_LAST_SONG;
+                    break;
+                case 'j': // next song
+                    $this->model->signal = PlayerUiModel::SIGNAL_NEXT_SONG;
+                    break;
+                case 'h': // back
+                    break;
+                case 'l': // forward
+                    break;
+                case 'p': // play or pause
+                    if ($this->model->playState === PlayStatus::PLAY) {
+                        $this->model->playState = PlayStatus::PAUSE;
+                    } else {
+                        $this->model->playState = PlayStatus::PLAY;
+                    }
+                    break;
+                case 's': // shuffle
+                    if ($this->model->shuffle === PlayStatus::SHUFFLE) {
+                        $this->model->shuffle = PlayStatus::NOT_SHUFFLE;
+                    } else {
+                        $this->model->shuffle = PlayStatus::SHUFFLE;
+                    }
+                    break;
+                case 'r': // repeat
+                    if ($this->model->repeat == PlayStatus::NOT_LOOP) {
+                        $this->model->repeat = PlayStatus::LOOP;
+                    } elseif ($this->model->repeat == PlayStatus::LOOP) {
+                        $this->model->repeat = PlayStatus::SINGLE_LOOP;
+                    } else {
+                        $this->model->repeat = PlayStatus::NOT_LOOP;
+                    }
+                    break;
+                case '^': // move start time
+                    $this->model->signal = -2;
+                    break;
+                case '$': // move end time?
+                    break;
+                default:
+                    return;
+            }
+            $this->dispatcher->wait();
         }
-        return;
+
     }
 }

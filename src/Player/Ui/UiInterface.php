@@ -13,6 +13,8 @@ interface UiInterface
 {
     public function getParent();
 
+    public function getModel();
+
     public function getRate();
 
     public function isHidden();

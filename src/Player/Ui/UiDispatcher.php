@@ -17,16 +17,24 @@ class UiDispatcher extends IntervalTimer
 {
     protected $uiStack;
 
+    protected $io;
+
     public function __construct(Dispatcher $dispatcher, UiInterface $ui)
     {
         $this->uiStack = new SplStack();
         $this->uiStack->push($ui);
+        $this->io = new PlayerIo($this, $ui->getModel());
 
         parent::__construct($dispatcher, $ui->getRate());
     }
 
     public function interval()
     {
+        if ($this->uiStack->top()->getModel()->isLock()) {
+            echo '.';
+            return;
+        }
+
         $result = $this->uiStack->top()->handle();
         if ($result === false) {
             $this->uiStack->pop();
@@ -41,5 +49,19 @@ class UiDispatcher extends IntervalTimer
             $this->uiStack->push($result);
             $this->delay = $this->uiStack->top()->getRate();
         }
+
+        $this->io->run();
+    }
+
+    public function clear()
+    {
+        parent::clear();
+        $this->dispatcher->clear();
+    }
+
+    public function wait()
+    {
+        $this->uiStack->top()->getModel()->lock(); // Must before render
+        $this->uiStack->top()->render();
     }
 }

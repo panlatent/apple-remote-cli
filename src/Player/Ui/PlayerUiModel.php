@@ -19,10 +19,17 @@ namespace Panlatent\AppleRemoteCli\Player\Ui;
  * @property string $songArtist       ;
  * @property string $songAlbum        ;
  * @property string $songTime         ;
+ * @property int    $signal           ;
  */
 class PlayerUiModel
 {
+    const SIGNAL_LAST_SONG = 1;
+    const SIGNAL_NEXT_SONG = 2;
+    const SIGNAL_START_SONG_TIME = 3;
+
     protected $where;
+
+    protected $lock;
 
     protected $properties;
 
@@ -68,8 +75,26 @@ class PlayerUiModel
     public function pop()
     {
         $changes = array_keys($this->changes);
-        $this->changes = [];
+
+        if ( ! $this->lock) {
+            $this->changes = [];
+        }
 
         return $changes;
+    }
+
+    public function isLock()
+    {
+        return $this->lock;
+    }
+
+    public function lock()
+    {
+        $this->lock = true;
+    }
+
+    public function unlock()
+    {
+        $this->lock = false;
     }
 }

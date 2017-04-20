@@ -65,6 +65,14 @@ abstract class UiAbstract implements UiInterface
     }
 
     /**
+     * @return \Panlatent\AppleRemoteCli\Player\Ui\PlayerUiModel
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * @return int
      */
     public function getRate()

@@ -32,7 +32,7 @@ class PlayerUi extends UiAbstract
 
     public function handle()
     {
-        if ( ! isset($this->model->playState) || $this->model->playState == PlayStatus::STOP) {
+        if ( ! isset($this->model->playState) || empty($this->model->songName)) {
             if ($this->progress) {
                 $this->freeUi();
             }
@@ -77,10 +77,12 @@ class PlayerUi extends UiAbstract
             $this->progress->setProgress((int)($this->currentTime/1000));
         } elseif ( ! in_array('songCurrentTime', $changes) && $this->model->playState == PlayStatus::PLAY) {
             $this->currentTime += 1000;
-
             $this->updateTime();
         }
-        $this->progress->advance();
+
+        if ($this->model->playState == PlayStatus::PLAY) {
+            $this->progress->advance();
+        }
     }
 
     protected function updateTime()
@@ -100,7 +102,7 @@ class PlayerUi extends UiAbstract
             '%songName%' . "\r\n" .
             '%songArtist% - %songAlbum%' . "\r\n" .
             '%playState% %songCurrentTime% <fg=white>⁌</>%bar%<fg=white>⁍</> %percent:3s%% -%songRemainingTime% / %songTime%' .
-            ' %shuffle% %repeat%'
+            ' %shuffle% %repeat%' . "\r\n"
         , $params));
 
         return $progress;
