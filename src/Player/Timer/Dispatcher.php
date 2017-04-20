@@ -59,4 +59,9 @@ class Dispatcher
             }
         }
     }
+
+    public function clear()
+    {
+        $this->done = true;
+    }
 }
