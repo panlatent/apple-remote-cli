@@ -7,14 +7,19 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-namespace Panlatent\AppleRemoteCli\Player\Ui;
+namespace Panlatent\AppleRemoteCli\Player\Cui;
 
 use Panlatent\AppleRemoteCli\Commands\Exception;
+use Panlatent\AppleRemoteCli\Player\PlayerViewModel;
 use Panlatent\AppleRemoteCli\PlayStatus;
+use Panlatent\AppleRemoteCli\Ui\ViewInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class PlayerUi extends UiAbstract
+class PlayerView extends View
 {
+    protected $rate = 1000;
+
     /**
      * @var bool
      */
@@ -29,14 +34,21 @@ class PlayerUi extends UiAbstract
      * @var int
      */
     protected $currentTime;
+    
+    public function __construct(OutputInterface $output, PlayerViewModel $viewModel, ViewInterface $parent = null)
+    {
+        parent::__construct($viewModel, $parent);
+        
+        $this->output = $output;
+    }
 
     public function handle()
     {
-        if ( ! isset($this->model->playState) || empty($this->model->songName)) {
+        if ( ! isset($this->viewModel->playState) || empty($this->viewModel->songName)) {
             if ($this->progress) {
                 $this->freeUi();
             }
-            return new CoverUi($this->dispatcher, $this->output, $this->model, $this);
+            return new CoverView($this->output, $this->viewModel, $this);
         }
 
         $this->render();
@@ -54,7 +66,7 @@ class PlayerUi extends UiAbstract
 
     protected function refreshUi()
     {
-        $this->progress = $this->makeProgressBar((int)($this->model->songTime/1000));
+        $this->progress = $this->makeProgressBar((int)($this->viewModel->songTime/1000));
         $this->update();
         $this->progress->start();
     }
@@ -68,19 +80,19 @@ class PlayerUi extends UiAbstract
 
     protected function update()
     {
-        $changes = $this->model->pop();
+        $changes = $this->viewModel->pop();
         foreach ($changes as $property) {
-            $this->progress->setMessage($this->getText($property, $this->model->$property), $property);
+            $this->progress->setMessage($this->getText($property, $this->viewModel->$property), $property);
         }
         if (in_array('songCurrentTime', $changes)) {
-            $this->currentTime = $this->model->songCurrentTime;
+            $this->currentTime = $this->viewModel->songCurrentTime;
             $this->progress->setProgress((int)($this->currentTime/1000));
-        } elseif ( ! in_array('songCurrentTime', $changes) && $this->model->playState == PlayStatus::PLAY) {
+        } elseif ( ! in_array('songCurrentTime', $changes) && $this->viewModel->playState == PlayStatus::PLAY) {
             $this->currentTime += 1000;
             $this->updateTime();
         }
 
-        if ($this->model->playState == PlayStatus::PLAY) {
+        if ($this->viewModel->playState == PlayStatus::PLAY) {
             $this->progress->advance();
         }
     }
@@ -88,7 +100,7 @@ class PlayerUi extends UiAbstract
     protected function updateTime()
     {
         $this->progress->setMessage($this->getTimeText($this->currentTime), 'songCurrentTime');
-        $this->progress->setMessage($this->getTimeText($this->model->songTime - $this->currentTime), 'songRemainingTime');
+        $this->progress->setMessage($this->getTimeText($this->viewModel->songTime - $this->currentTime), 'songRemainingTime');
     }
 
     protected function makeProgressBar($max, $params = [])

@@ -7,17 +7,15 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-namespace Panlatent\AppleRemoteCli\Player\Ui;
+namespace Panlatent\AppleRemoteCli\Ui;
 
-interface UiInterface
+interface ViewInterface
 {
+    public function isHidden();
+
     public function getParent();
 
-    public function getModel();
-
-    public function getRate();
-
-    public function isHidden();
+    public function getViewModel();
 
     public function show();
 

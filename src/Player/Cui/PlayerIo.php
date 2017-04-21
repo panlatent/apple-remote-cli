@@ -7,19 +7,20 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-namespace Panlatent\AppleRemoteCli\Player\Ui;
+namespace Panlatent\AppleRemoteCli\Player\Cui;
 
+use Panlatent\AppleRemoteCli\Player\PlayerViewModel;
 use Panlatent\AppleRemoteCli\PlayStatus;
 
 class PlayerIo
 {
-    protected $dispatcher;
+    protected $application;
 
     protected $model;
 
-    public function __construct(UiDispatcher $dispatcher, PlayerUiModel $model)
+    public function __construct(Application $application, PlayerViewModel $model)
     {
-        $this->dispatcher = $dispatcher;
+        $this->application = $application;
         $this->model = $model;
         shell_exec('stty -echo time 0 -icanon');
         stream_set_blocking(STDIN, false);
@@ -30,13 +31,13 @@ class PlayerIo
         if (($c = fgetc(STDIN))) {
             switch ($c) {
                 case 'q': // quit
-                    $this->dispatcher->clear();
+                    $this->application->clear();
                     break;
                 case 'k': // last song
-                    $this->model->signal = PlayerUiModel::SIGNAL_LAST_SONG;
+                    $this->model->signal = PlayerViewModel::SIGNAL_LAST_SONG;
                     break;
                 case 'j': // next song
-                    $this->model->signal = PlayerUiModel::SIGNAL_NEXT_SONG;
+                    $this->model->signal = PlayerViewModel::SIGNAL_NEXT_SONG;
                     break;
                 case 'h': // back
                     break;
@@ -73,8 +74,7 @@ class PlayerIo
                 default:
                     return;
             }
-            $this->dispatcher->wait();
+            $this->application->wait();
         }
-
     }
 }

@@ -9,14 +9,10 @@
 
 namespace Panlatent\AppleRemoteCli\Player;
 
-use GuzzleHttp\Exception\ClientException;
 use Panlatent\AppleRemoteCli\PlayControl;
-use Panlatent\AppleRemoteCli\Player\Ui\PlayerUi;
-use Panlatent\AppleRemoteCli\Player\Ui\PlayerUiModel;
-use Panlatent\AppleRemoteCli\Player\Ui\UiDispatcher;
-use Panlatent\AppleRemoteCli\PlayStatus;
+use Panlatent\AppleRemoteCli\Player\Cui\Application as CuiApplication;
+//use Panlatent\AppleRemoteCli\Player\Gui\Application as GuiApplication;
 use Panlatent\Timer\Dispatcher;
-use Panlatent\Timer\Interval;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,9 +26,9 @@ class Player
 
     protected $control;
 
-    protected $ui;
-
     protected $model;
+
+    protected $gui;
 
     public function __construct(InputInterface $input, OutputInterface $output, PlayControl $control)
     {
@@ -40,76 +36,36 @@ class Player
         $this->input = $input;
         $this->output = $output;
         $this->control = $control;
-        $this->model = new PlayerUiModel();
 
-        $this->ui = new UiDispatcher($this->dispatcher, new PlayerUi($this->dispatcher, $output, $this->model));
-        $this->dispatcher->addTimer($this->ui);
-        $this->dispatcher->addTimer(new Interval($this->dispatcher, 1000 * 4, [$this, 'handle']));
+
+
+//        $playerUiModel = new PlayerUiModel();
+//        $this->model = new Model($playerUiModel, $control);
+
+//        if ( ! $withGui) {
+//            $this->ui = new PlayerModel($this->dispatcher,
+//                new PlayerView($this->dispatcher, $this->output, new PlayerUiModel()));
+//        } else {
+//            $this->ui = new GuiDispatcher($this, new PlayerWindow($this->dispatcher, $this->output, $playerUiModel));
+//        }
+    }
+
+    public function withGui()
+    {
+        $this->gui = true;
     }
 
     public function run()
     {
-        $this->handle();
-        $this->dispatcher->dispatch();
+        if ( ! $this->gui) {
+            new CuiApplication($this->output, $this->control);
+        } else {
+           // new GuiGApplication();
+        }
+//
+//        $this->model->handle();
+//        $this->dispatcher->dispatch();
     }
 
-    public function handle()
-    {
-        try {
-            if ($this->model->isLock()) {
-                $this->update();
-                $this->model->unlock();
-            }
 
-            $playStatue = $this->control->getPlayStatus();
-        } catch (ClientException $e) {
-            die(0);
-        }
-        $this->model->playState = $playStatue->playStatus;
-        $this->model->shuffle = $playStatue->shuffle;
-        $this->model->repeat = $playStatue->repeat;
-        $this->model->songTime = $playStatue->songTime;
-        $this->model->songCurrentTime = $playStatue->songTime - $playStatue->songTimeRemaining;
-        $this->model->songRemainingTime = $playStatue->songTimeRemaining;
-        $this->model->songName = $playStatue->songName;
-        $this->model->songArtist = $playStatue->songArtist;
-        $this->model->songAlbum = $playStatue->songAlbum;
-    }
-
-    protected function update()
-    {
-        if (isset($this->model->signal) && $this->model->signal !== null) {
-            if ($this->model->signal == PlayerUiModel::SIGNAL_LAST_SONG) {
-                $this->control->last();
-            } else if ($this->model->signal == PlayerUiModel::SIGNAL_NEXT_SONG)  {
-                $this->control->next();
-            }
-            $this->model->signal = null;
-            return;
-        }
-
-        $changes = $this->model->pop();
-        if ( ! empty($changes)) {
-            foreach ($changes as $property) {
-                switch ($property) {
-                    case 'playState':
-                        if ($this->model->playState == PlayStatus::PLAY) {
-                            $this->control->play();
-                        } elseif ($this->model->playState == PlayStatus::PAUSE) {
-                            $this->control->pause();
-                        }
-                        break;
-                    case 'shuffle':
-                        $this->control->shuffle($this->model->shuffle);
-                        break;
-                    case 'repeat':
-                        $this->control->repeat($this->model->repeat);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-    }
 }

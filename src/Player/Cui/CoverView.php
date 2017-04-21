@@ -7,23 +7,32 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-namespace Panlatent\AppleRemoteCli\Player\Ui;
+namespace Panlatent\AppleRemoteCli\Player\Cui;
 
+use Panlatent\AppleRemoteCli\Player\PlayerViewModel;
 use Panlatent\AppleRemoteCli\PlayStatus;
+use Panlatent\AppleRemoteCli\Ui\ViewInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class CoverUi extends UiAbstract
+class CoverView extends View
 {
-    protected $rate = 100;
-
+    protected $output;
     /**
      * @var \Symfony\Component\Console\Helper\ProgressBar
      */
     protected $progress;
 
+    public function __construct(OutputInterface $output, PlayerViewModel $model, ViewInterface $parent = null)
+    {
+        parent::__construct($model, $parent);
+
+        $this->output = $output;
+    }
+
     public function handle()
     {
-        if (isset($this->model->playState) && $this->model->playState != PlayStatus::STOP) {
+        if (isset($this->viewModel->playState) && $this->viewModel->playState != PlayStatus::STOP) {
             $this->freeUi();
             return false;
         }

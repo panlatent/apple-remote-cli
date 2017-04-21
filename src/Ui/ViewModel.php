@@ -7,28 +7,10 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-namespace Panlatent\AppleRemoteCli\Player\Ui;
+namespace Panlatent\AppleRemoteCli\Ui;
 
-/**
- * @property string $playState        ;
- * @property string $shuffle          ;
- * @property string $repeat           ;
- * @property string $songCurrentTime  ;
- * @property string $songRemainingTime;
- * @property string $songName         ;
- * @property string $songArtist       ;
- * @property string $songAlbum        ;
- * @property string $songTime         ;
- * @property int    $signal           ;
- */
-class PlayerUiModel
+abstract class ViewModel
 {
-    const SIGNAL_LAST_SONG = 1;
-    const SIGNAL_NEXT_SONG = 2;
-    const SIGNAL_START_SONG_TIME = 3;
-
-    protected $where;
-
     protected $lock;
 
     protected $properties;
