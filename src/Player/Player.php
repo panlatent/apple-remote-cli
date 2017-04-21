@@ -11,7 +11,7 @@ namespace Panlatent\AppleRemoteCli\Player;
 
 use Panlatent\AppleRemoteCli\PlayControl;
 use Panlatent\AppleRemoteCli\Player\Cui\Application as CuiApplication;
-//use Panlatent\AppleRemoteCli\Player\Gui\Application as GuiApplication;
+use Panlatent\AppleRemoteCli\Player\Gui\Application as GuiApplication;
 use Panlatent\Timer\Dispatcher;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,18 +36,6 @@ class Player
         $this->input = $input;
         $this->output = $output;
         $this->control = $control;
-
-
-
-//        $playerUiModel = new PlayerUiModel();
-//        $this->model = new Model($playerUiModel, $control);
-
-//        if ( ! $withGui) {
-//            $this->ui = new PlayerModel($this->dispatcher,
-//                new PlayerView($this->dispatcher, $this->output, new PlayerUiModel()));
-//        } else {
-//            $this->ui = new GuiDispatcher($this, new PlayerWindow($this->dispatcher, $this->output, $playerUiModel));
-//        }
     }
 
     public function withGui()
@@ -60,11 +48,8 @@ class Player
         if ( ! $this->gui) {
             new CuiApplication($this->output, $this->control);
         } else {
-           // new GuiGApplication();
+            new GuiApplication($this->control);
         }
-//
-//        $this->model->handle();
-//        $this->dispatcher->dispatch();
     }
 
 

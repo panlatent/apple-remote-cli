@@ -35,11 +35,11 @@ abstract class PlayerModel extends Model
                 $this->update();
                 $this->viewModel->unlock();
             }
-
             $playStatue = $this->control->getPlayStatus();
         } catch (ClientException $e) {
             die(0);
         }
+
         $this->viewModel->playState = $playStatue->playStatus;
         $this->viewModel->shuffle = $playStatue->shuffle;
         $this->viewModel->repeat = $playStatue->repeat;
@@ -85,6 +85,5 @@ abstract class PlayerModel extends Model
                 }
             }
         }
-
     }
 }
