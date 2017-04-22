@@ -45,6 +45,7 @@ $ composer require panlatent/apple-remote-cli
 
 Usage
 -----
+Use a command:
 ```bash
 $ apple-remote-cli play/next/last/vol [-+]value
 ```
@@ -53,6 +54,13 @@ Run player:
 ```bash
 $ apple-remote-cli player
 ```
+The `player` command will open a character UI. Use a key control iTunes:
+
+ `q` Quit | `p` Play/Pause | `j` Next | `k` Last | `s` Switch Shuffle | `r` Switch Repeat
+ 
+Character UI is a single process. This means that it is affected by network (HTTP Request).
+
+We have an experimental option `--gui`, it will open a GUI window. :) Help we improve.
 
 License
 -------
