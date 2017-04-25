@@ -9,7 +9,7 @@
 
 namespace Panlatent\AppleRemoteCli;
 
-use Panlatent\DigitalAudio\Document;
+use Panlatent\Daap\Document;
 
 class PlayStatus
 {
@@ -52,7 +52,7 @@ class PlayStatus
 
     public function __construct(Document $status)
     {
-        /** @var \Panlatent\DigitalAudio\ElementStorage $status */
+        /** @var \Panlatent\Daap\ElementStorage $status */
         $status = $status->getElements()->one('cmst');
 //        var_dump($status->one('carp'));die();
         $this->playStatus = $status->one('caps')->getValue();

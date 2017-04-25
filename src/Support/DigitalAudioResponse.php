@@ -9,7 +9,7 @@
 
 namespace Panlatent\AppleRemoteCli\Support;
 
-use Panlatent\DigitalAudio\Document;
+use Panlatent\Daap\Document;
 
 class DigitalAudioResponse extends Document
 {

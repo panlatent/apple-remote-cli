@@ -9,8 +9,8 @@
 
 namespace Panlatent\AppleRemoteCli\Support;
 
-use Panlatent\DigitalAudio\ElementFactory;
-use Panlatent\DigitalAudio\ElementValueType;
+use Panlatent\Daap\ElementFactory;
+use Panlatent\Daap\ElementValueType;
 
 class ExtraContentTypes extends ElementFactory
 {

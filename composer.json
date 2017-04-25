@@ -7,7 +7,7 @@
         "symfony/console": "^3.2",
         "symfony/yaml": "^3.2",
         "guzzlehttp/guzzle": "^6.2",
-        "panlatent/digital-audio": "dev-master",
+        "panlatent/daap": "dev-master",
         "panlatent/timer": "dev-master",
         "gabrielrcouto/php-gui": "dev-master"
     },
