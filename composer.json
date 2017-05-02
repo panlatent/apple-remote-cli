@@ -33,6 +33,6 @@
         }
     },
     "bin": [
-        "bin/apple-remote-cli"
+        "bin/apple-remote"
     ]
 }
