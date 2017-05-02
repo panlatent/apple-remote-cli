@@ -33,7 +33,7 @@ data.
 
 Requirements
 -------------
-+ PHP 5.6 or later
++ PHP 5.5 or later
 
 Installation
 -------------
