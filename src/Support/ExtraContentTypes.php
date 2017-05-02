@@ -10,48 +10,10 @@
 namespace Panlatent\AppleRemoteCli\Support;
 
 use Panlatent\Daap\ElementFactory;
-use Panlatent\Daap\ElementValueType;
 
 class ExtraContentTypes extends ElementFactory
 {
-    protected $extra = [
-        [
-            'cmvo',
-            'volume',
-            'daap.volume',
-            ElementValueType::INT,
-        ],
-        [
-            'cant',
-            'song time remaining',
-            'daap.songtimeremaining',
-            ElementValueType::INT,
-        ],
-        [
-            'cast',
-            'song time total',
-            'daap.songtimetotal',
-            ElementValueType::INT,
-        ],
-        [
-            'caps',
-            'play status',
-            'daap.playstatus',
-            ElementValueType::STRING,
-        ],
-        [
-            'cash',
-            'play shuffle',
-            'daap.playshuffle',
-            ElementValueType::STRING,
-        ],
-        [
-            'carp',
-            'play repeat',
-            'daap.playrepeat',
-            ElementValueType::STRING,
-        ]
-    ];
+    protected $extra = [];
 
     public function __construct()
     {
