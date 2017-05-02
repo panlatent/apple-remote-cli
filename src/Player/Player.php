@@ -51,6 +51,4 @@ class Player
             new GuiApplication($this->control);
         }
     }
-
-
 }

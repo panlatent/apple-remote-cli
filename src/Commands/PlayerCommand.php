@@ -29,6 +29,12 @@ class PlayerCommand extends ControlCommand
         parent::execute($input, $output);
         $player = new Player($input, $output, $this->control);
         if ($input->getOption('gui')) {
+            if (version_compare(PHP_VERSION, '7.0', '<') ||
+                in_array('gui', get_loaded_extensions())) {
+                $output->writeln('<error>Open a gui window failed: php version no less than 7.0 and installed gui extension</error>');
+                return;
+            }
+
             $player->withGui();
         }
         $player->run();
